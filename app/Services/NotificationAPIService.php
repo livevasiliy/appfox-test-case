@@ -7,6 +7,7 @@ namespace App\Services;
 use App\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
+use View;
 
 /**
  * Class NotificationAPIService
@@ -40,8 +41,7 @@ class NotificationAPIService
      */
     final public function markAsReadById(string $id): JsonResponse
     {
-
-        $unReadNotification = auth()->user()->unreadNotifications->whereId($id)->first();
+        $unReadNotification = auth()->user()->unreadNotifications->where('id', '=', $id)->first();
         if ($unReadNotification)
         {
             $unReadNotification->markAsRead();
@@ -89,18 +89,13 @@ class NotificationAPIService
     /**
      * @param int $id
      *
-     * @return JsonResponse
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    final public function listAllNotifications(int $id): JsonResponse
+    final public function listAllNotifications(int $id)
     {
-        return response()->json(
-            [
-                'code' => Response::HTTP_OK,
-                'message' => __('notifications.list_all_success_retrieved'),
-                'notifications' => $listNotifications = (new User)->find($id)->notifications()->get()->toArray()
-            ],
-            Response::HTTP_OK
-        );
+        $notifications = (new User)->find($id)->unreadNotifications()->get()->toJson();
+
+        return view('notifications', compact('notifications'));
     }
 
     /**

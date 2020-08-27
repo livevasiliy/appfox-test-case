@@ -75,11 +75,11 @@ class NotificationController extends Controller
     /**
      * Retrieve list all notifications.
      *
-     * @param  int  $id
+     * @param int $id
      *
-     * @return JsonResponse
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function listAllNotifications(int $id): JsonResponse
+    public function listAllNotifications(int $id)
     {
         return $this->service->listAllNotifications($id);
     }

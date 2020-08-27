@@ -6,7 +6,7 @@
             <h1>Список уведомлений</h1>
         </div>
         <div class="section-body">
-            <notifications-list :user-id="{{ $userId }}" />
+            <list-notifications></list-notifications>
         </div>
     </section>
 @endsection

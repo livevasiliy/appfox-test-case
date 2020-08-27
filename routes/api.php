@@ -15,15 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::post('notify/read', 'NotificationController@markAsRead')
-    ->name('markAsRead');
-Route::post('notify/read/{id}', 'NotificationController@markAsReadById')
-    ->name('markAsReadById');
-Route::get('notify/list/unread', 'NotificationController@listAllUnReadNotifications')
-    ->name('listUnreadNotifications');
-Route::get('notify/list/read', 'NotificationController@listAllReadNotifications')
-    ->name('listReadNotifications');
-Route::post('notify/{id}/remove', 'NotificationController@removeNotificationById');
+
 
 
 Route::post('subscribe/posts', 'SubscriptionController@subscribeOnPosts');

@@ -28,57 +28,22 @@
 </template>
 
 <script>
+    import {mapActions, mapGetters} from "vuex";
+
     export default {
-        props: {
-            user: {
-                type: Object,
-                required: true
-            },
-        },
         data() {
             return {}
         },
         methods: {
-            subscribeOnPosts() {
-                axios.post('/subscribe/posts', {
-                    'user_id': this.user.id
-                }).then((response) => {
-                    console.log(response.data)
-                    this.user = response.data.user
-                }).catch((error) => {
-                    throw error
-                })
-            },
-            subscribeOnProducts() {
-                axios.post('/subscribe/products', {
-                    'user_id': this.user.id
-                }).then((response) => {
-                    console.log(response.data)
-                     this.user = response.data.user
-                }).catch((error) => {
-                    throw error
-                })
-            },
-            unSubscribeOnPosts() {
-                axios.post('/unsubscribe/posts', {
-                    'user_id': this.user.id
-                }).then((response) => {
-                    console.log(response.data)
-                     this.user = response.data.user
-                }).catch((error) => {
-                    throw error
-                })
-            },
-            unSubscribeOnProducts() {
-                axios.post('/unsubscribe/products', {
-                    'user_id': this.user.id
-                }).then((response) => {
-                        console.log(response.data)
-                     this.user = response.data.user
-                }).catch((error) => {
-                    throw error
-                })
-            }
+            ...mapActions([
+                "subscribeOnPosts",
+                "subscribeOnProducts",
+                "unSubscribeOnPosts",
+                "unSubscribeOnProducts"
+            ])
+        },
+        computed: {
+            ...mapGetters(['user'])
         }
     }
 </script>

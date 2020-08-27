@@ -36,7 +36,7 @@
                 <notification-empty v-if="notifications.length === 0"/>
             </div>
             <div class="dropdown-footer text-center">
-                <a :href="`/notify/${this.userId}/list`">Просмотреть все <i class="fas fa-chevron-right"></i></a>
+                <a :href="`/notify/${JSON.parse(user).id}/list`">Просмотреть все <i class="fas fa-chevron-right"></i></a>
             </div>
         </div>
     </li>
@@ -44,52 +44,30 @@
 <script>
     import NotificationItem from './NotificationItem';
     import NotificationEmpty from './NotificationEmpty';
+    import {mapActions, mapGetters} from "vuex";
 
     export default {
-        props: ['userId', 'unreads'],
-        data() {
-            return {
-                notifications: []
-            }
-        },
+        props: ['user', 'unreads'],
         beforeMount: function () {
+            let _notifications = []
             for (let {id, type, data: {typeNotify, message, url}} of JSON.parse(this.unreads)) {
-                this.notifications.push({id, type, typeNotify, message, url});
+                _notifications.push({id, type, typeNotify, message, url});
             }
+            this.$store.dispatch('fetchUnreadNotifications', _notifications)
         },
         created() {
-            Echo.private('App.User.' + this.userId)
-                .notification((notification) => {
-                    this.notifications.push(notification)
-                });
+            this.$store.dispatch('setUser', JSON.parse(this.user))
+            this.$store.dispatch('fetchNotifications', this.user.id)
         },
         components: {
             NotificationItem,
             NotificationEmpty
         },
         methods: {
-            makeAsRead() {
-                if (this.notifications.length) {
-                    axios.post('/notify/read')
-                        .then((response) => {
-                            console.log(response)
-                            this.notifications = [];
-                        });
-                }
-            },
-            readNotification($event) {
-                const idx = this.notifications.findIndex(notification => notification.id === $event);
-                let {url} = this.notifications.find(notification => notification.id === $event);
-
-                axios.post(`/notify/read/${$event}`).then((response) => {
-                    console.log(response)
-                    this.notifications = [
-                        ...this.notifications.slice(0, idx),
-                        ...this.notifications.slice(idx + 1)
-                    ];
-                });
-                //window.location = url;
-            }
+            ...mapActions(['makeAsRead', 'readNotification', 'fetchNotifications']),
+        },
+        computed: {
+            ...mapGetters(['notifications'])
         }
     }
 </script>
