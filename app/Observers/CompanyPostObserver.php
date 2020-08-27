@@ -16,7 +16,7 @@ class CompanyPostObserver
      */
     public function created(CompanyPost $companyPost)
     {
-        $users = User::all();
+        $users = User::whereHasSubscribeOnNewPosts(true)->get();
         foreach ($users as $user) {
             NotifyNewPost::dispatch($user, $companyPost);
         }

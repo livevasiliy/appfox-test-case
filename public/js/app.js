@@ -48860,23 +48860,6 @@ var render = function() {
         )
       : _vm._e(),
     _vm._v(" "),
-    _vm.user.has_subscribe_on_new_products === false
-      ? _c(
-          "button",
-          {
-            staticClass: "btn btn-secondary",
-            attrs: { type: "button" },
-            on: {
-              click: function($event) {
-                $event.preventDefault()
-                return _vm.subscribeOnProducts($event)
-              }
-            }
-          },
-          [_vm._v("Подписаться на товары")]
-        )
-      : _vm._e(),
-    _vm._v(" "),
     _vm.user.has_subscribe_on_new_posts === true
       ? _c(
           "button",
@@ -48891,6 +48874,23 @@ var render = function() {
             }
           },
           [_vm._v("Отписаться на новости")]
+        )
+      : _vm._e(),
+    _vm._v(" "),
+    _vm.user.has_subscribe_on_new_products === false
+      ? _c(
+          "button",
+          {
+            staticClass: "btn btn-secondary",
+            attrs: { type: "button" },
+            on: {
+              click: function($event) {
+                $event.preventDefault()
+                return _vm.subscribeOnProducts($event)
+              }
+            }
+          },
+          [_vm._v("Подписаться на товары")]
         )
       : _vm._e(),
     _vm._v(" "),

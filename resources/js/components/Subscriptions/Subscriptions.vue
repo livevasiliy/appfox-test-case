@@ -8,16 +8,16 @@
         >Подписаться на новости</button>
         <button
             type="button"
-            class="btn btn-secondary"
-            v-if="user.has_subscribe_on_new_products === false"
-            @click.prevent="subscribeOnProducts"
-        >Подписаться на товары</button>
-        <button
-            type="button"
             class="btn btn-danger mr-2"
             v-if="user.has_subscribe_on_new_posts === true"
             @click.prevent="unSubscribeOnPosts"
         >Отписаться на новости</button>
+        <button
+            type="button"
+            class="btn btn-secondary"
+            v-if="user.has_subscribe_on_new_products === false"
+            @click.prevent="subscribeOnProducts"
+        >Подписаться на товары</button>
         <button
             type="button"
             class="btn btn-danger"

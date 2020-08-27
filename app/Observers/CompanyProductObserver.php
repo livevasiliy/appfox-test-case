@@ -16,7 +16,7 @@ class CompanyProductObserver
      */
     public function created(CompanyProduct $companyProduct)
     {
-        $users = User::all();
+        $users = User::whereHasSubscribeOnNewProducts(true)->get();
         foreach ($users as $user) {
             NotifyAvaliableNewProduct::dispatch($user, $companyProduct);
         }
