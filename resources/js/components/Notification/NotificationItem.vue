@@ -1,5 +1,5 @@
 <template>
-    <button class="d-inline-block dropdown-item dropdown-item-unread" @click="$emit('readNotification')">
+    <button class="d-inline-block dropdown-item dropdown-item-unread" @click.prevent="$emit('readNotification', id)">
         <NewPost v-if="typeNotify === 'new_post' "/>
         <NewProduct v-else-if="typeNotify === 'new_product' "/>
         <div class="dropdown-item-desc d-inline-block ml-2">

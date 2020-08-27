@@ -4,8 +4,12 @@ namespace App\Providers;
 
 use App\CompanyPost;
 use App\CompanyProduct;
+use App\Employee;
 use App\Observers\CompanyPostObserver;
 use App\Observers\CompanyProductObserver;
+use App\Observers\EmployeeObserver;
+use App\Observers\UserObserver;
+use App\User;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -29,5 +33,7 @@ class AppServiceProvider extends ServiceProvider
     {
         CompanyProduct::observe(CompanyProductObserver::class);
         CompanyPost::observe(CompanyPostObserver::class);
+        Employee::observe(EmployeeObserver::class);
+        User::observe(UserObserver::class);
     }
 }

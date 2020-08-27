@@ -31,12 +31,12 @@
                     v-if="notifications.length !== 0"
                     v-for="notification in notifications.slice(0, 5)"
                     :key="notification.id"
-                    @readNotification="readNotification($event, notification.id)"
+                    @readNotification="readNotification($event)"
                 />
                 <notification-empty v-if="notifications.length === 0"/>
             </div>
             <div class="dropdown-footer text-center">
-                <a :href="`/users/${this.userId}/notify/list`">Просмотреть все <i class="fas fa-chevron-right"></i></a>
+                <a :href="`/notify/${this.userId}/list`">Просмотреть все <i class="fas fa-chevron-right"></i></a>
             </div>
         </div>
     </li>
@@ -58,7 +58,6 @@
             }
         },
         created() {
-            console.log('NOTIFICATIONS MOUNTED')
             Echo.private('App.User.' + this.userId)
                 .notification((notification) => {
                     this.notifications.push(notification)
@@ -70,22 +69,26 @@
         },
         methods: {
             makeAsRead() {
-                if (this.unreadNotifications.length) {
-                    axios.post('http://appfox.loc/notify/read')
+                if (this.notifications.length) {
+                    axios.post('/notify/read')
                         .then((response) => {
-                            this.unreadNotifications = [];
+                            console.log(response)
+                            this.notifications = [];
                         });
                 }
             },
-            readNotification($event, id) {
-                const idx = this.unreadNotifications.findIndex(notification => notification.id === id);
-                let {url} = this.unreadNotifications.find(notification => notification.id === id);
-                window.location = url;
-                axios.post(`http://appfox.loc/notify/read/${id}`);
-                this.notifications = [
-                    ...this.notifications.slice(0, idx),
-                    ...this.notifications.slice(idx + 1)
-                ];
+            readNotification($event) {
+                const idx = this.notifications.findIndex(notification => notification.id === $event);
+                let {url} = this.notifications.find(notification => notification.id === $event);
+
+                axios.post(`/notify/read/${$event}`).then((response) => {
+                    console.log(response)
+                    this.notifications = [
+                        ...this.notifications.slice(0, idx),
+                        ...this.notifications.slice(idx + 1)
+                    ];
+                });
+                //window.location = url;
             }
         }
     }
