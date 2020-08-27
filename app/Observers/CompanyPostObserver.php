@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\CompanyPost;
+use App\User;
 use App\Jobs\NotifyNewPost;
 
 class CompanyPostObserver
@@ -15,7 +16,10 @@ class CompanyPostObserver
      */
     public function created(CompanyPost $companyPost)
     {
-        NotifyNewPost::dispatch($companyPost);
+        $users = User::all();
+        foreach ($users as $user) {
+            NotifyNewPost::dispatch($user, $companyPost);
+        }
     }
 
     /**

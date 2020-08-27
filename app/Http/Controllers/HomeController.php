@@ -16,16 +16,6 @@ class HomeController extends Controller
         $this->middleware('auth')->only('home');
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
-    public function welcome()
-    {
-        return view('welcome');
-    }
-
     public function home()
     {
         return view('home');

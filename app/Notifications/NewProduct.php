@@ -4,6 +4,7 @@ namespace App\Notifications;
 
 use App\CompanyProduct;
 use Illuminate\Bus\Queueable;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Notification;
 
 class NewProduct extends Notification
@@ -33,7 +34,7 @@ class NewProduct extends Notification
      */
     public function via($notifiable)
     {
-        return ['database'];
+        return ['database', 'broadcast'];
     }
 
     public function toDatabase($notifiable): array
@@ -41,7 +42,29 @@ class NewProduct extends Notification
         return [
             'message' => "Доступен новый товар: {$this->product->name}",
             'typeNotify' => 'new_product',
-            'url' => route('products.show', ['id' => $this->product->id])
+            'url' => route('products.show', ['product' => $this->product->id])
+        ];
+    }
+
+    public function toBroadcast($notifiable)
+    {
+        return new BroadcastMessage([
+            'message' => "Доступен новый товар: {$this->product->name}",
+            'typeNotify' => 'new_product',
+            'url' => route('products.show', ['product' => $this->product->id])
+        ]);
+    }
+
+    /**
+     * Get the array representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * @return array
+     */
+    public function toArray($notifiable)
+    {
+        return [
+            //
         ];
     }
 }

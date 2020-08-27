@@ -4,6 +4,7 @@ namespace App\Notifications;
 
 use App\CompanyPost;
 use Illuminate\Bus\Queueable;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Notification;
 
 class NewPost extends Notification
@@ -34,7 +35,7 @@ class NewPost extends Notification
      */
     public function via($notifiable)
     {
-        return ['database'];
+        return ['database', 'broadcast'];
     }
 
     public function toDatabase($notifiable): array
@@ -42,7 +43,29 @@ class NewPost extends Notification
         return [
             'message' => "Новый пост: {$this->post->title}",
             'typeNotify' => 'new_post',
-            'url' => route('posts.show', ['id' => $this->post->id])
+            'url' => route('posts.show', ['post' => $this->post->id])
+        ];
+    }
+
+    public function toBroadcast($notifiable)
+    {
+        return new BroadcastMessage([
+            'message' => "Новый пост: {$this->post->title}",
+            'typeNotify' => 'new_post',
+            'url' => route('posts.show', ['post' => $this->post->id])
+        ]);
+    }
+
+    /**
+     * Get the array representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * @return array
+     */
+    public function toArray($notifiable)
+    {
+        return [
+            //
         ];
     }
 }

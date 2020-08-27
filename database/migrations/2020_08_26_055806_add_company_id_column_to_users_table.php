@@ -14,7 +14,9 @@ class AddCompanyIdColumnToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->foreignId('company_id')->after('email');
+            $table->foreignId('company_id')
+                ->nullable()
+                ->after('email');
             $table->foreign('company_id')
                 ->references('id')
                 ->on('companies')
