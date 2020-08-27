@@ -16,4 +16,5 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', 'WelcomeController');
 Route::get('/home', 'HomeController@home')->name('home');
 Route::resource('posts', 'CompanyPostController');
+Route::resource('products', 'CompanyProductController');
 Auth::routes();

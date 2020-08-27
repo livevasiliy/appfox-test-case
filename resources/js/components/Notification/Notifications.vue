@@ -4,9 +4,10 @@
             href="#"
             data-toggle="dropdown"
             class="nav-link notification-toggle nav-link-lg"
-            :class="{'beep': unreadNotifications.length > 0}"
+            :class="{'beep': notifications.length > 0}"
         >
             <i class="far fa-bell"></i>
+            {{ notifications.length }}
         </a>
         <div class="dropdown-menu dropdown-list dropdown-menu-right">
             <div class="dropdown-header">
@@ -25,15 +26,14 @@
                 <notification-item
                     :id="notification.id"
                     :message="notification.message"
-                    :date="notification.date"
                     :type-notify="notification.typeNotify"
                     :url="notification.url"
-                    v-if="unreadNotifications.length !== 0"
-                    v-for="notification in this.unreadNotifications"
+                    v-if="notifications.length !== 0"
+                    v-for="notification in notifications.slice(0, 5)"
                     :key="notification.id"
                     @readNotification="readNotification($event, notification.id)"
                 />
-                <notification-empty v-if="unreadNotifications.length === 0"/>
+                <notification-empty v-if="notifications.length === 0"/>
             </div>
             <div class="dropdown-footer text-center">
                 <a :href="`/users/${this.userId}/notify/list`">Просмотреть все <i class="fas fa-chevron-right"></i></a>
@@ -46,18 +46,22 @@
     import NotificationEmpty from './NotificationEmpty';
 
     export default {
-        props: ['unreads', 'userId'],
+        props: ['userId', 'unreads'],
         data() {
             return {
-                unreadNotifications: []
+                notifications: []
             }
         },
-        mounted() {
+        beforeMount: function () {
+            for (let {id, type, data: {typeNotify, message, url}} of JSON.parse(this.unreads)) {
+                this.notifications.push({id, type, typeNotify, message, url});
+            }
+        },
+        created() {
             console.log('NOTIFICATIONS MOUNTED')
             Echo.private('App.User.' + this.userId)
                 .notification((notification) => {
-                    console.log(notification)
-                    this.unreadNotifications.push(notification);
+                    this.notifications.push(notification)
                 });
         },
         components: {

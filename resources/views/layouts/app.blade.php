@@ -97,9 +97,3 @@
     @yield('script')
 </body>
 </html>
-<script>
-    import Notifications from "../../js/components/Notification/Notifications";
-    export default {
-        components: {Notifications}
-    }
-</script>

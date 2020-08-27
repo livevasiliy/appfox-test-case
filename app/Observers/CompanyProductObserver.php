@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\CompanyProduct;
 use App\Jobs\NotifyAvaliableNewProduct;
+use App\User;
 
 class CompanyProductObserver
 {
@@ -15,7 +16,10 @@ class CompanyProductObserver
      */
     public function created(CompanyProduct $companyProduct)
     {
-        NotifyAvaliableNewProduct::dispatch($companyProduct);
+        $users = User::all();
+        foreach ($users as $user) {
+            NotifyAvaliableNewProduct::dispatch($user, $companyProduct);
+        }
     }
 
     /**

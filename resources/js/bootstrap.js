@@ -18,6 +18,13 @@ window.axios = require('axios');
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 window.axios.defaults.baseURL = process.env.MIX_BASE_URL;
 window.axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
+let token = document.head.querySelector('meta[name="csrf-token"]');
+
+if (token) {
+    window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
+} else {
+    console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
+}
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
@@ -31,8 +38,10 @@ window.Pusher = require('pusher-js');
 
 window.Echo = new Echo({
     broadcaster: 'pusher',
-    key: '721bd2bcece53eb20392',
-    cluster: 'en',
-    encrypted: false,
+    key: "721bd2bcece53eb20392",
+    cluster: "en",
     forceTLS: false,
+    wsHost: window.location.hostname,
+    wsPort: 6001,
+    disableStats: true
 });

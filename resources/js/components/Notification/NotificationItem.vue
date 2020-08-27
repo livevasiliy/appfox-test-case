@@ -1,10 +1,9 @@
 <template>
-    <button class="dropdown-item dropdown-item-unread" @click="$emit('readNotification')">
+    <button class="d-inline-block dropdown-item dropdown-item-unread" @click="$emit('readNotification')">
         <NewPost v-if="typeNotify === 'new_post' "/>
         <NewProduct v-else-if="typeNotify === 'new_product' "/>
-        <div class="dropdown-item-desc">
+        <div class="dropdown-item-desc d-inline-block ml-2">
             {{ message }}
-            <div class="time text-primary">{{ date }}</div>
         </div>
     </button>
 </template>
@@ -16,7 +15,6 @@
     export default {
         props: [
             'message',
-            'date',
             'typeNotify',
             'url',
             'id'
@@ -29,6 +27,8 @@
     }
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
+    .dropdown-item-unread {
+        background-color: #f8f9fa;
+    }
 </style>

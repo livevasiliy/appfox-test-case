@@ -1,6 +1,6 @@
 <template>
-    <div class="dropdown-item-icon bg-danger text-white">
-        <i class="fas fa-exclamation-triangle"></i>
+    <div class="dropdown-item-icon d-inline-block">
+        <i class="fas fa-shopping-bag"></i>
     </div>
 </template>
 
