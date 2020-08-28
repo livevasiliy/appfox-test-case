@@ -93,7 +93,7 @@ class NotificationAPIService
      */
     final public function listAllNotifications(int $id)
     {
-        $notifications = (new User)->find($id)->unreadNotifications()->get()->toJson();
+        $notifications = (new User)::find($id)->unreadNotifications()->get()->toJson();
 
         return view('notifications', compact('notifications'));
     }

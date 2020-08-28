@@ -1,6 +1,6 @@
 export default {
     state: {
-        user: {}
+        user: JSON.parse(localStorage.getItem('user')) || {}
     },
     mutations: {
         setUser(state, payload) {
@@ -22,9 +22,10 @@ export default {
     actions: {
         setUser({commit}, payload) {
             commit('setUser', payload)
+            localStorage.setItem('user', JSON.stringify(payload))
         },
-        subscribeOnPosts({commit, getters}) {
-            axios.post('/api/subscribe/posts', {
+        async subscribeOnPosts({commit, getters}) {
+            await axios.post('/api/subscribe/posts', {
                 'user_id': getters.user.id
             }).then((response) => {
                 commit('subscribeOnPosts', response.data.user)
@@ -32,8 +33,8 @@ export default {
                 throw error
             })
         },
-        subscribeOnProducts({commit, getters}) {
-            axios.post('/api/subscribe/products', {
+        async subscribeOnProducts({commit, getters}) {
+            await axios.post('/api/subscribe/products', {
                 'user_id': getters.user.id
             }).then((response) => {
                 commit('subscribeOnProducts',response.data.user)
@@ -41,8 +42,8 @@ export default {
                 throw error
             })
         },
-        unSubscribeOnPosts({commit, getters}) {
-            axios.post('/api/unsubscribe/posts', {
+        async unSubscribeOnPosts({commit, getters}) {
+            await axios.post('/api/unsubscribe/posts', {
                 'user_id': getters.user.id
             }).then((response) => {
                 commit('unSubscribeOnPosts', response.data.user)
@@ -50,8 +51,8 @@ export default {
                 throw error
             })
         },
-        unSubscribeOnProducts({commit, getters}) {
-            axios.post('/api/unsubscribe/products', {
+        async unSubscribeOnProducts({commit, getters}) {
+            await axios.post('/api/unsubscribe/products', {
                 'user_id': getters.user.id
             }).then((response) => {
                 commit('unSubscribeOnProducts', response.data.user)

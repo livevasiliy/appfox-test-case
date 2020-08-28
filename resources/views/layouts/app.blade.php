@@ -58,8 +58,9 @@
                             @endif
                         @else
                             <notifications
-                                unreads="{{ auth()->user()->unreadNotifications }}"
-                                user="{{ auth()->user() }}"></notifications>
+                                :unreads="{{ auth()->user()->unreadNotifications }}"
+                                :user="{{ auth()->user() }}"
+                                :user-id="{{ auth()->id() }}"></notifications>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown"
                                    class="nav-link dropdown-toggle"

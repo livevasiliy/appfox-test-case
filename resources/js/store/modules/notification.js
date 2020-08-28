@@ -1,19 +1,23 @@
 export default {
     state: {
-        notifications: []
+        notifications: JSON.parse(localStorage.getItem('notifications')) || []
     },
     mutations: {
         makeAsRead(state, payload) {
             state.notifications = payload
+            localStorage.setItem('notifications', JSON.stringify(state.notifications))
         },
         readNotification(state, payload) {
             state.notifications = payload
+            localStorage.setItem('notifications', JSON.stringify(state.notifications))
         },
         fetchNotifications(state, payload) {
             state.notifications = payload
+            localStorage.setItem('notifications', JSON.stringify(state.notifications))
         },
         fetchUnreadNotifications(state, payload) {
             state.notifications = payload
+            localStorage.setItem('notifications', JSON.stringify(state.notifications))
         }
     },
     actions: {
@@ -32,10 +36,11 @@ export default {
             let {url} = getters.notifications.find(notification => notification.id === payload);
 
             axios.post(`/notify/read/${payload}`).then((response) => {
-                commit('readNotification',[
+                let _notifications = [
                     ...getters.notifications.slice(0, idx),
                     ...getters.notifications.slice(idx + 1)
-                ]);
+                ];
+                commit('readNotification', _notifications);
             });
         },
         fetchNotifications({commit}, payload) {

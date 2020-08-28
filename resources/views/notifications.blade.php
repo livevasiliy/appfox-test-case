@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+
     <section class="section">
         <div class="section-header">
             <h1>Список уведомлений</h1>

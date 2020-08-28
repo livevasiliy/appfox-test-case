@@ -10,7 +10,7 @@
             {{ notifications.length }}
         </a>
         <div class="dropdown-menu dropdown-list dropdown-menu-right">
-            <div class="dropdown-header">
+            <div class="dropdown-header" v-if="notifications.length > 0">
                 Уведомления
                 <div class="float-right">
                     <a
@@ -26,17 +26,18 @@
                 <notification-item
                     :id="notification.id"
                     :message="notification.message"
+                    :date="notification.date"
                     :type-notify="notification.typeNotify"
                     :url="notification.url"
                     v-if="notifications.length !== 0"
-                    v-for="notification in notifications.slice(0, 5)"
+                    v-for="notification in notifications"
                     :key="notification.id"
-                    @readNotification="readNotification($event)"
+                    @readNotification="readNotification($event, notification.id)"
                 />
                 <notification-empty v-if="notifications.length === 0"/>
             </div>
-            <div class="dropdown-footer text-center">
-                <a :href="`/notify/${JSON.parse(user).id}/list`">Просмотреть все <i class="fas fa-chevron-right"></i></a>
+            <div class="dropdown-footer text-center" v-if="notifications.length > 0">
+                <a :href="`/notify/${userId}/list`">Просмотреть все <i class="fas fa-chevron-right"></i></a>
             </div>
         </div>
     </li>
@@ -47,24 +48,30 @@
     import {mapActions, mapGetters} from "vuex";
 
     export default {
-        props: ['user', 'unreads'],
-        beforeMount: function () {
-            let _notifications = []
-            for (let {id, type, data: {typeNotify, message, url}} of JSON.parse(this.unreads)) {
-                _notifications.push({id, type, typeNotify, message, url});
+        props: ['unreads', 'userId', 'user'],
+        data() {
+            return {
+                unreadNotifications: []
             }
-            this.$store.dispatch('fetchUnreadNotifications', _notifications)
         },
-        created() {
-            this.$store.dispatch('setUser', JSON.parse(this.user))
-            this.$store.dispatch('fetchNotifications', this.user.id)
+        beforeMount: function () {
+            for (let {id, type, data: {typeNotify, message, url}} of this.unreads) {
+                this.unreadNotifications.push({id, type, typeNotify, message, url});
+            }
+        },
+        mounted() {
+            Echo.private('App.User.' + this.userId)
+                .notification((notification) => {
+                    this.unreadNotifications.push(notification);
+                });
+            this.$store.dispatch('fetchUnreadNotifications', this.unreadNotifications)
         },
         components: {
             NotificationItem,
             NotificationEmpty
         },
         methods: {
-            ...mapActions(['makeAsRead', 'readNotification', 'fetchNotifications']),
+            ...mapActions(['makeAsRead', 'readNotification'])
         },
         computed: {
             ...mapGetters(['notifications'])

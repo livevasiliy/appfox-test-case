@@ -1,16 +1,16 @@
 <template>
     <ul>
+        <NotificationEmpty v-if="notifications.length === 0" />
         <NotificationItem
+            v-else
             :id="notification.id"
             :message="notification.message"
             :type-notify="notification.typeNotify"
             :url="notification.url"
-            v-if="notifications.length !== 0"
-            v-for="notification in notifications"
+            v-for="notification in this.notifications"
             :key="notification.id"
             @readNotification="readNotification($event)"
         />
-        <NotificationEmpty v-else />
     </ul>
 </template>
 
